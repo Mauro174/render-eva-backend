@@ -1,0 +1,6 @@
+# Forzar saltos de línea estilo Unix (LF) en el wrapper de Maven
+mvnw text eol=lf
+
+# Para scripts de Windows (.cmd), usar saltos de línea CRLF
+*.cmd text eol=crlf
+
