@@ -27,6 +27,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
+        // 👇 Excepción para el health check de Render (ruta pública "/")
+        String path = request.getRequestURI();
+        if ("/".equals(path)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         final String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
@@ -45,7 +53,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT Token no inicia con la palabra Bearer");
             System.out.println(requestTokenHeader);
         }
-
 
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -68,6 +75,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
 
 }
